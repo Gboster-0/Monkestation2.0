@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <base href="../../../" />
+    <link rel="stylesheet" href="dmdoc.css" />
+    <title>&#x2F;obj&#x2F;machinery&#x2F;power&#x2F;transmission_laser - &#x2F;tg&#x2F; Station 13</title>
+</head>
+<body>
+<header>
+    <a href="index.html">&#x2F;tg&#x2F; Station 13</a> -
+    <a href="index.html#modules">Modules</a> -
+    <a href="index.html#types">Types</a>
+ &mdash; <a href="obj/machinery/power/transmission_laser.html#var">Var Details</a> - <a href="obj/machinery/power/transmission_laser.html#proc">Proc Details</a></header>
+<main>
+<h1>transmission_laser <aside>/<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/<a href="obj/machinery/power.html">power</a>/<a href="obj/machinery/power/transmission_laser.html">transmission_laser</a></aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L2">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 2"/></a></h1>
+
+<table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/blocked_objects">blocked_objects</a></th><td>list of all blocking turfs or objects</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/bound_width">bound_width</a></th><td>3x3 tiles</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/capacity">capacity</a></th><td>the total capacity of the laser</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/charge">charge</a></th><td>our current charge</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/firing">firing</a></th><td>are we attempting to fire the laser currently?</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/input_attempt">input_attempt</a></th><td>should we try to input charge paired with the var below to check if its fully inputing</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/input_available">input_available</a></th><td>the amount of charge coming in from the inputs last tick</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/inputting">inputting</a></th><td>are we currently inputting</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/laser_effects">laser_effects</a></th><td>we need to create a list of all lasers we are creating so we can delete them in the end</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/output_level">output_level</a></th><td>amount of power we are outputting</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/range">range</a></th><td>the range we have this basically determines how far the beam goes its redone on creation so its set to a small number here</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/selling_power">selling_power</a></th><td>are we selling the power or just sending it into the ether</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/terminal">terminal</a></th><td>variables go below here
+the terminal this is connected to</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/total_earnings">total_earnings</a></th><td>how much we have earned in total</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/turned_on">turned_on</a></th><td>have we been switched on?</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#var/unsent_earnings">unsent_earnings</a></th><td>the amount of money we haven't sent to cargo yet</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#proc/atom_entered_beam">atom_entered_beam</a></th><td>this is called every time something enters our beams</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#proc/destroy_lasers">destroy_lasers</a></th><td>this is why we set the range we did</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#proc/examine">examine</a></th><td>what</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#proc/get_front_turf">get_front_turf</a></th><td>what</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#proc/return_charge">return_charge</a></th><td>returns the charge level from [0 to 6]</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#proc/sell_power">sell_power</a></th><td>increased by a single % per 500 KW</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#proc/setup_lasers">setup_lasers</a></th><td>the other 25% will be sent to engineers in the future but for now its stored inside</td></tr>
+            <tr><th><a href="obj/machinery/power/transmission_laser.html#proc/update_overlays">update_overlays</a></th><td>appearance changes are here</td></tr></table>
+    <h2 id="var">Var Details</h2><h3 id="var/blocked_objects"><aside class="declaration">var </aside>blocked_objects
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L48">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 48"/></a></h3>
+        <p>list of all blocking turfs or objects</p><h3 id="var/bound_width">bound_width
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L15">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 15"/></a></h3>
+        <p>3x3 tiles</p><h3 id="var/capacity"><aside class="declaration">var </aside>capacity
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L26">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 26"/></a></h3>
+        <p>the total capacity of the laser</p><h3 id="var/charge"><aside class="declaration">var </aside>charge
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L28">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 28"/></a></h3>
+        <p>our current charge</p><h3 id="var/firing"><aside class="declaration">var </aside>firing
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L38">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 38"/></a></h3>
+        <p>are we attempting to fire the laser currently?</p><h3 id="var/input_attempt"><aside class="declaration">var </aside>input_attempt
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L30">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 30"/></a></h3>
+        <p>should we try to input charge paired with the var below to check if its fully inputing</p><h3 id="var/input_available"><aside class="declaration">var </aside>input_available
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L34">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 34"/></a></h3>
+        <p>the amount of charge coming in from the inputs last tick</p><h3 id="var/inputting"><aside class="declaration">var </aside>inputting
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L32">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 32"/></a></h3>
+        <p>are we currently inputting</p><h3 id="var/laser_effects"><aside class="declaration">var </aside>laser_effects
+            <aside>&ndash; /list</aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L46">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 46"/></a></h3>
+        <p>we need to create a list of all lasers we are creating so we can delete them in the end</p><h3 id="var/output_level"><aside class="declaration">var </aside>output_level
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L24">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 24"/></a></h3>
+        <p>amount of power we are outputting</p><h3 id="var/range"><aside class="declaration">var </aside>range
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L22">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 22"/></a></h3>
+        <p>the range we have this basically determines how far the beam goes its redone on creation so its set to a small number here</p><h3 id="var/selling_power"><aside class="declaration">var </aside>selling_power
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L40">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 40"/></a></h3>
+        <p>are we selling the power or just sending it into the ether</p><h3 id="var/terminal"><aside class="declaration">var </aside>terminal
+            <aside>&ndash; /<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/<a href="obj/machinery/power.html">power</a>/terminal</aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L20">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 20"/></a></h3>
+        <p>variables go below here
+the terminal this is connected to</p><h3 id="var/total_earnings"><aside class="declaration">var </aside>total_earnings
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L42">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 42"/></a></h3>
+        <p>how much we have earned in total</p><h3 id="var/turned_on"><aside class="declaration">var </aside>turned_on
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L36">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 36"/></a></h3>
+        <p>have we been switched on?</p><h3 id="var/unsent_earnings"><aside class="declaration">var </aside>unsent_earnings
+            <aside>&ndash; </aside>
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L44">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 44"/></a></h3>
+        <p>the amount of money we haven't sent to cargo yet</p><h2 id="proc">Proc Details</h2><h3 id="proc/atom_entered_beam"><aside class="declaration">proc </aside>atom_entered_beam<aside>(/<a href="obj.html">obj</a>/<a href="obj/effect/transmission_beam.html">effect/transmission_beam</a>/triggered, /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/arrived) 
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L254">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 254"/></a></aside>
+        </h3>
+        <p>this is called every time something enters our beams</p><h3 id="proc/destroy_lasers"><aside class="declaration">proc </aside>destroy_lasers<aside>() 
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L246">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 246"/></a></aside>
+        </h3>
+        <p>this is why we set the range we did</p><h3 id="proc/examine"><aside class="parent"><a title="/atom" href="atom.html#proc/examine">&uarr;</a></aside>examine<aside>(/<a href="mob.html">mob</a>/user) 
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L93">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 93"/></a></aside>
+        </h3>
+        <p>what</p><h3 id="proc/get_front_turf"><aside class="declaration">proc </aside>get_front_turf<aside>() 
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L82">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 82"/></a></aside>
+        </h3>
+        <p>what</p><h3 id="proc/return_charge"><aside class="declaration">proc </aside>return_charge<aside>() 
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L135">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 135"/></a></aside>
+        </h3>
+        <p>returns the charge level from [0 to 6]</p><h3 id="proc/sell_power"><aside class="declaration">proc </aside>sell_power<aside>(power_amount) 
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L208">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 208"/></a></aside>
+        </h3>
+        <p>increased by a single % per 500 KW</p><h3 id="proc/setup_lasers"><aside class="declaration">proc </aside>setup_lasers<aside>() 
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L235">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 235"/></a></aside>
+        </h3>
+        <p>the other 25% will be sent to engineers in the future but for now its stored inside</p><h3 id="proc/update_overlays"><aside class="parent"><a title="/atom/movable" href="atom/movable.html#proc/update_overlays">&uarr;</a></aside>update_overlays<aside>() 
+        
+    
+            <a href="https://github.com/Gboster-0/Monkestation2.0/blob/0df75c45bf15b3f1811b09cd03ad93929164c1e7/monkestation/code/game/machinery/power/ptl.dm#L99">
+        <img src="git.png" width="16" height="16" title="monkestation&#x2F;code&#x2F;game&#x2F;machinery&#x2F;power&#x2F;ptl.dm 99"/></a></aside>
+        </h3>
+        <p>appearance changes are here</p></main>
+<footer>
+    tgstation.dme
+    <a href="https://github.com/Gboster-0/Monkestation2.0/tree/0df75c45bf15b3f1811b09cd03ad93929164c1e7">0df75c4</a>
+        (master) &mdash; <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.7.3</a></footer>
+</body>
+</html>
