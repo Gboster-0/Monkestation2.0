@@ -54,6 +54,9 @@
 
 	return data + ..()
 
+/datum/antagonist/vassal/revenge/pre_mindshield(mob/implanter, mob/living/mob_override)
+	return COMPONENT_MINDSHIELD_RESISTED
+
 /datum/antagonist/vassal/revenge/proc/on_master_death(datum/antagonist/bloodsucker/bloodsuckerdatum, mob/living/carbon/master)
 	SIGNAL_HANDLER
 
@@ -65,7 +68,6 @@
 		if(master_powers.purchase_flags & BLOODSUCKER_DEFAULT_POWER)
 			continue
 		master_powers.Grant(owner.current)
-		owner.current.remove_status_effect(/datum/status_effect/agent_pinpointer/vassal_edition)
 
 	var/datum/objective/survive/new_objective = new
 	new_objective.name = "Avenge Bloodsucker"

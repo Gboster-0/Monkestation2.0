@@ -286,7 +286,7 @@ GLOBAL_LIST_INIT(phobia_objs, list(
 		/obj/item/storage/pill_bottle,
 		/obj/item/surgical_drapes,
 		/obj/item/surgicaldrill,
-		/obj/machinery/atmospherics/components/unary/cryo_cell,
+		/obj/machinery/cryo_cell,
 		/obj/machinery/dna_scannernew,
 		/obj/machinery/door/airlock/medical,
 		/obj/machinery/sleeper,
@@ -593,7 +593,6 @@ GLOBAL_LIST_INIT(phobia_turfs, list(
 GLOBAL_LIST_INIT(phobia_species, list(
 	"aliens" = typecacheof(list(
 		/datum/species/abductor,
-		/datum/species/jelly,
 		/datum/species/pod,
 		/datum/species/shadow,
 		/datum/species/oozeling,

@@ -59,6 +59,9 @@ GLOBAL_LIST_EMPTY(floran_leaves_list) //Monkestation Addition
 GLOBAL_LIST_EMPTY(satyr_fluff_list) //Monkestation Addition
 GLOBAL_LIST_EMPTY(satyr_tail_list) //Monkestation Addition
 GLOBAL_LIST_EMPTY(satyr_horns_list) //Monkestation Addition
+GLOBAL_LIST_EMPTY(oni_tail_list) //Monkestation Addition
+GLOBAL_LIST_EMPTY(oni_wings_list) //Monkestation Addition
+GLOBAL_LIST_EMPTY(oni_horns_list) //Monkestation Addition
 
 GLOBAL_LIST_INIT(color_list_ethereal, list(
 	"Blue" = "#3399ff",
@@ -356,3 +359,14 @@ GLOBAL_LIST_INIT(status_display_state_pictures, list(
 	"blank",
 	"shuttle",
 ))
+
+/// 1000 element long list containing the 1000 most common words in the English language.
+/// Indexed by word, value is the rank of the word in the list. So accessing it is fasta.
+GLOBAL_LIST_INIT(most_common_words, init_common_words())
+
+/proc/init_common_words()
+	. = list()
+	var/i = 1
+	for(var/word in world.file2list("strings/1000_most_common.txt"))
+		.[word] = i
+		i += 1

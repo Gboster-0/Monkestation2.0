@@ -139,11 +139,8 @@ GLOBAL_VAR_INIT(observer_default_invisibility, INVISIBILITY_OBSERVER)
 
 	add_to_dead_mob_list()
 
-	for(var/v in GLOB.active_alternate_appearances)
-		if(!v)
-			continue
-		var/datum/atom_hud/alternate_appearance/AA = v
-		AA.onNewMob(src)
+	for(var/datum/atom_hud/alternate_appearance/alt_hud as anything in GLOB.active_alternate_appearances)
+		alt_hud.apply_to_new_mob(src)
 
 	. = ..()
 
@@ -342,7 +339,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	ghostize(FALSE) // FALSE parameter is so we can never re-enter our body. U ded.
 	return TRUE
 
-/mob/camera/verb/ghost()
+/mob/eye/verb/ghost()
 	set category = "OOC"
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
@@ -360,7 +357,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		set_glide_size(glide_size_override)
 	if(NewLoc)
 		abstract_move(NewLoc)
-		update_parallax_contents()
 	else
 		var/turf/destination = get_turf(src)
 
@@ -381,6 +377,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/forceMove(atom/destination)
 	abstract_move(destination) // move like the wind
 	return TRUE
+
+/mob/dead/observer/Moved(atom/old_loc, movement_dir, forced, list/old_locs, momentum_change)
+	. = ..()
+	var/area/new_area = get_area(src)
+	if(new_area != ambience_tracked_area)
+		update_ambience_area(new_area)
 
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"
@@ -482,7 +484,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 
 	usr.abstract_move(pick(L))
-	update_parallax_contents()
 
 /mob/dead/observer/verb/follow()
 	set category = "Ghost"
@@ -525,6 +526,9 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	. = ..()
 	//restart our floating animation after orbit is done.
 	pixel_y = base_pixel_y
+	// if we were autoobserving, reset perspective
+	if (!isnull(client) && !isnull(client.eye))
+		reset_perspective(null)
 
 /mob/dead/observer/verb/jumptomob() //Moves the ghost instead of just changing the ghosts's eye -Nodrak
 	set category = "Ghost"
@@ -554,7 +558,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 	if(isturf(destination_turf))
 		source_mob.abstract_move(destination_turf)
-		source_mob.update_parallax_contents()
 	else
 		to_chat(source_mob, span_danger("This mob is not located in the game world."))
 
@@ -720,14 +723,10 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	GLOB.crew_manifest_tgui.ui_interact(src)
 
 //this is called when a ghost is drag clicked to something.
-/mob/dead/observer/MouseDrop(atom/over)
-	if(!usr || !over)
-		return
-	if (isobserver(usr) && usr.client.holder && (isliving(over) || iscameramob(over)) )
-		if (usr.client.holder.cmd_ghost_drag(src,over))
+/mob/dead/observer/mouse_drop_dragged(atom/over, mob/user)
+	if (isobserver(user) && user.client.holder && (isliving(over) || iseyemob(over)))
+		if (user.client.holder.cmd_ghost_drag(src,over))
 			return
-
-	return ..()
 
 /mob/dead/observer/Topic(href, href_list)
 	..()
@@ -1022,9 +1021,25 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		game = create_mafia_game("mafia")
 	game.ui_interact(usr)
 
-/mob/dead/observer/CtrlShiftClick(mob/user)
-	if(isobserver(user) && check_rights(R_SPAWN))
-		change_mob_type( /mob/living/carbon/human , null, null, TRUE) //always delmob, ghosts shouldn't be left lingering
+/mob/dead/observer/AltClickOn(atom/target)
+	client.loot_panel.open(get_turf(target))
+
+/mob/dead/observer/AltClickSecondaryOn(atom/target)
+	if(client && check_rights_for(client, R_DEBUG))
+		client.toggle_tag_datum(src)
+
+/mob/dead/observer/CtrlShiftClickOn(atom/target)
+	if(isobserver(target) && check_rights(R_SPAWN))
+		var/mob/dead/observer/target_ghost = target
+
+		target_ghost.change_mob_type(/mob/living/carbon/human , null, null, TRUE) //always delmob, ghosts shouldn't be left lingering
+	else if(is_admin(src)) // stupid snowflake checks for admins to mess with people
+		if(istype(target, /obj/structure/table))
+			var/obj/structure/table/table = target
+			table.flip_table(src)
+		else if(istype(target, /obj/structure/flippedtable))
+			var/obj/structure/flippedtable/flipped_table = target
+			flipped_table.unflip_table(src)
 
 /mob/dead/observer/examine(mob/user)
 	. = ..()
@@ -1037,6 +1052,14 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	. = list(span_notice("<i>You examine [src] closer, and note the following...</i>"))
 	. += list("\t>[span_admin("[ADMIN_FULLMONTY(src)]")]")
 
+/mob/dead/observer/get_status_tab_items()
+	. = ..()
+	if(!GLOB.observer_default_invisibility)
+		. += "Ghosts visible to the living!"
+	else if (!invisibility)
+		. += "You are visible to the living!"
+	else if (invisibility <= SEE_INVISIBLE_LIVING)
+		. += "You are visibile to most living mobs!"
 
 /mob/dead/observer/proc/set_invisibility(value)
 	invisibility = value

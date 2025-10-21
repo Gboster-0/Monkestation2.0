@@ -370,6 +370,12 @@
 /obj/item/storage/box/syndie_kit/imp_macrobomb/PopulateContents()
 	new /obj/item/implanter/explosive_macro(src)
 
+/obj/item/storage/box/syndie_kit/imp_fakemacro
+	name = "macroreviver implant box"
+
+/obj/item/storage/box/syndie_kit/imp_fakemacro/PopulateContents()
+	new /obj/item/implanter/fakemacro(src)
+
 /obj/item/storage/box/syndie_kit/imp_uplink
 	name = "uplink implant box"
 
@@ -410,6 +416,8 @@
 
 /obj/item/storage/box/syndie_kit/space
 	name = "boxed space suit and helmet"
+	desc = "A sleek, sturdy box used to hold an emergency spacesuit."
+	illustration = "syndiesuit"
 
 /obj/item/storage/box/syndie_kit/space/Initialize(mapload)
 	. = ..()
@@ -545,19 +553,15 @@
 	new /obj/item/book/granter/crafting_recipe/combat_baking(src)
 
 /obj/item/storage/box/syndie_kit/laser_arm/PopulateContents()  // monkestation edit begin: Syndicate implants
-	new /obj/item/autosurgeon/syndicate/cyberlink_syndicate(src)
 	new /obj/item/autosurgeon/syndicate/laser_arm (src)
 
 /obj/item/storage/box/syndie_kit/nodrop/PopulateContents()
-	new /obj/item/autosurgeon/syndicate/cyberlink_syndicate(src)
 	new /obj/item/autosurgeon/syndicate/nodrop(src)
 
 /obj/item/storage/box/syndie_kit/anti_stun/PopulateContents()
-	new /obj/item/autosurgeon/syndicate/cyberlink_syndicate(src)
 	new /obj/item/autosurgeon/syndicate/anti_stun(src)
 
 /obj/item/storage/box/syndie_kit/reviver/PopulateContents()
-	new /obj/item/autosurgeon/syndicate/cyberlink_syndicate(src)
 	new /obj/item/autosurgeon/syndicate/reviver(src) //monkestation edit end: Syndicate implants
 
 /obj/item/storage/box/syndie_kit/centcom_costume/PopulateContents()
@@ -738,7 +742,7 @@
 	/// If all the antag datums are 'fake' or none exist, disallow induction! No self-antagging.
 	var/faker
 	for(var/datum/antagonist/antag_datum as anything in human_target.mind.antag_datums)
-		if((antag_datum.antag_flags & FLAG_FAKE_ANTAG))
+		if((antag_datum.antag_flags & ANTAG_FAKE))
 			faker = TRUE
 
 	if(faker || isnull(human_target.mind.antag_datums)) // GTFO. Technically not foolproof but making a heartbreaker or a paradox clone a nuke op sounds hilarious

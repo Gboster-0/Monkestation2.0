@@ -21,6 +21,7 @@
 /obj/item/storage/bag
 	slot_flags = ITEM_SLOT_BELT | ITEM_SLOT_POCKETS
 	w_class = WEIGHT_CLASS_NORMAL
+	storage_type = /datum/storage/bag
 
 /obj/item/storage/bag/Initialize(mapload)
 	. = ..()
@@ -124,6 +125,8 @@
 	///If this is TRUE, the holder won't receive any messages when they fail to pick up ore through crossing it
 	var/spam_protection = FALSE
 	var/mob/listeningTo
+	var/datum/component/connect_loc_behalf/connector
+	var/static/list/loc_connections = list(COMSIG_ATOM_ENTERED = PROC_REF(on_listener_turf_entered))
 	///Cooldown on balloon alerts when picking ore
 	COOLDOWN_DECLARE(ore_bag_balloon_cooldown)
 
@@ -143,14 +146,25 @@
 		return
 	if(listeningTo)
 		UnregisterSignal(listeningTo, COMSIG_MOVABLE_MOVED)
+		qdel(connector)
 	RegisterSignal(user, COMSIG_MOVABLE_MOVED, PROC_REF(pickup_ores))
+	connector = AddComponent(/datum/component/connect_loc_behalf, user, loc_connections)
 	listeningTo = user
 
 /obj/item/storage/bag/ore/dropped()
 	. = ..()
 	if(listeningTo)
+		QDEL_NULL(connector)
 		UnregisterSignal(listeningTo, COMSIG_MOVABLE_MOVED)
 		listeningTo = null
+
+/obj/item/storage/bag/ore/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(istype(tool, /obj/item/boulder))
+		to_chat(user, span_warning("You can't fit [tool] into [src]. \
+			Perhaps you should break it down first, or find an ore box."))
+		return ITEM_INTERACT_BLOCKING
+
+	return NONE
 
 /obj/item/storage/bag/ore/proc/pickup_ores(mob/living/user)
 	SIGNAL_HANDLER
@@ -199,6 +213,12 @@
 			)
 
 	spam_protection = FALSE
+
+/obj/item/storage/bag/ore/proc/on_listener_turf_entered(datum/source, atom/movable/thing, atom/old_loc, list/atom/old_locs)
+	SIGNAL_HANDLER
+	// isturf(old_loc) check is important, else we just immediately scoop anything we deposit on the floor right back up
+	if(listeningTo && isturf(old_loc) && is_type_in_typecache(thing, atom_storage.can_hold))
+		pickup_ores(listeningTo)
 
 /obj/item/storage/bag/ore/cyborg
 	name = "cyborg mining satchel"
@@ -265,11 +285,10 @@
 	. = ..()
 	. += span_notice("Ctrl-click to activate seed extraction.")
 
-/obj/item/storage/bag/plants/portaseeder/CtrlClick(mob/user)
-	if(user.incapacitated())
-		return
+/obj/item/storage/bag/plants/portaseeder/item_ctrl_click(mob/user)
 	for(var/obj/item/plant in contents)
 		seedify(plant, 1)
+	return CLICK_ACTION_SUCCESS
 
 // -----------------------------
 //        Sheet Snatcher
@@ -524,10 +543,6 @@
 		/obj/item/stack/biomass // monke: make science bags able to hold biomass cubes
 		))
 
-/*
- *  Construction bag (for engineering, holds stock parts and electronics)
- */
-
 /obj/item/storage/bag/construction
 	name = "construction bag"
 	icon = 'icons/obj/tools.dmi'
@@ -535,22 +550,7 @@
 	worn_icon_state = "construction_bag"
 	desc = "A bag for storing small construction components."
 	resistance_flags = FLAMMABLE
-
-/obj/item/storage/bag/construction/Initialize(mapload)
-	. = ..()
-	atom_storage.max_total_storage = 100
-	atom_storage.max_slots = 50
-	atom_storage.max_specific_storage = WEIGHT_CLASS_SMALL
-	atom_storage.set_holdable(list(
-		/obj/item/assembly,
-		/obj/item/circuitboard,
-		/obj/item/electronics,
-		/obj/item/reagent_containers/cup/beaker,
-		/obj/item/stack/cable_coil,
-		/obj/item/stack/ore/bluespace_crystal,
-		/obj/item/stock_parts,
-		/obj/item/wallframe/camera,
-		))
+	storage_type = /datum/storage/bag/construction
 
 /obj/item/storage/bag/harpoon_quiver
 	name = "harpoon quiver"
@@ -630,7 +630,7 @@
 		user.balloon_alert(user, "no held crossbow!")
 		return
 	var/obj/item/gun/ballistic/rifle/rebarxbow/held_crossbow = held_item
-	if(held_crossbow.magazine.contents.len >= held_crossbow.magazine.max_ammo)
+	if(length(held_crossbow.magazine.stored_ammo) >= held_crossbow.magazine.max_ammo)
 		user.balloon_alert(user, "no more room!")
 		return
 	if(!do_after(user, 1.2 SECONDS, user, IGNORE_USER_LOC_CHANGE))
