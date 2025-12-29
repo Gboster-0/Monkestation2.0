@@ -1,0 +1,4 @@
+author: "Chelxox"
+delete-after: True
+changes:
+  - bugfix: "Fixed the emergency rolling bed's drop stack, now dropping 1 sheet of iron instead of titanium."
